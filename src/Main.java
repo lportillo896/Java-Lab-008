@@ -1,3 +1,12 @@
+/**
+ *
+ * @author Trevor Hartman
+ * @author Logan Portillo
+ *
+ * @since Version 1.0
+ *
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,25 +16,30 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        // Create a scanner object
+        Scanner console = new Scanner(System.in);
 
-        // Write a loop that will ask the user to enter a file path to gather stats on,
-        // and continue until "Q" is entered.
+        while (true) {
+            System.out.println("Enter a file path or press Q to exit: ");
+            String input = console.nextLine();
+            if (input.equalsIgnoreCase("Q")) {
+                break;
+            }
+            Path path = Paths.get(input);
+            File file = path.toFile();
 
-            // Reference Java-Assignment-003 to see how to use the java.nio libraries to turn a String path into a File
-
-            // Ask the user if they would like to skip whitespace
-
-            // Create a variable called skipWs that stores the user's response as a boolean
+            System.out.println("Would you like to skip whitespace? (y/n): ");
+            String white = console.nextLine();
+            boolean skipWs;
+            skipWs = white.equalsIgnoreCase("y");
 
             /*
              * Within this try/catch block, which is used to handle possible errors thrown by the code in the try block,
              * write code to get the line, word, and character count of the File object created above!
              */
-            try {
-                // You will need to create a FileStats object by passing it the File object and your skipWs variable as args
 
-                // You will need to call the fs.read method, which you need to implement!
+            try {
+                FileStats fs = new FileStats(file, skipWs);
+                fs.read();
 
                 /*
                  * You will access the FileStats object's getter methods to get the file's line, word, character count and
@@ -33,9 +47,14 @@ public class Main {
                  *
                  * Stats: lines - 6, words - 46, chars - 237 /path/to/file/fileName.txt
                  */
+
+                System.out.printf("Statistics: %d Lines, %d Words, %d Chars %s%n", fs.getNumLines(),
+                        fs.getNumWords(), fs.getNumChars(), fs.getFileName());
+
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
 
+        }
     }
 }
